@@ -8,10 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>();
-//builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-//    .AddEntityFrameworkStores<ApplicationDbContext>();
-
-
 
 
 var ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -26,13 +22,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-//using (var scope = app.Services.CreateScope())
-//{
-//    var services = scope.ServiceProvider;
-
-//    var context = services.GetRequiredService<ApplicationDbContext>();    
-//    context.Database.Migrate();
-//}
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
