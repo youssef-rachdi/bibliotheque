@@ -12,6 +12,8 @@ builder.Services.AddDbContext<ApplicationDbContext>();
 //    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 
+
+
 var ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseSqlServer(ConnectionString));
 var app = builder.Build();
