@@ -70,6 +70,22 @@ namespace Library.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
+
+            [Required]
+            [Display(Name = "UserName")]
+            [StringLength(255, ErrorMessage = "The the first name field should have a maximum of 255 charachters")]
+            public string UserName { get; set; }
+
+            [Required]
+            [Display(Name="Firsname")]
+            [StringLength(255, ErrorMessage = "The the first name field should have a maximum of 255 charachters")]
+            public string FirstName { get; set; }
+
+
+            [Required]
+            [Display(Name = "Lastname")]
+            [StringLength(255, ErrorMessage = "The the last name field should have a maximum of 255 charachters")]
+            public string LastName { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -113,6 +129,9 @@ namespace Library.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+                user.UserName = Input.UserName;
+                user.UserName = Input.FirstName;
+                
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
