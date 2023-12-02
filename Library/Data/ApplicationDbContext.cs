@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Configuration;
+using System.Reflection.Emit;
 using System.Security.Claims;
 using WebBooks.Models;
 
@@ -17,7 +18,7 @@ namespace Library.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-            
+
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -37,11 +38,13 @@ namespace Library.Data
         {
             base.OnModelCreating(builder);
             builder.ApplyConfiguration(new ApplicationUserEntityConfiguration());
+
+           
         }
 
 
         public DbSet<Book> books { get; set; }
-        public DbSet<BookCategory> BookCategories { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
 
     public class ApplicationUserEntityConfiguration : IEntityTypeConfiguration<ApplicationUser>

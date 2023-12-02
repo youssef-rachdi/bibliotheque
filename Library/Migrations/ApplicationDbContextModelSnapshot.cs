@@ -234,15 +234,17 @@ namespace Library.Migrations
 
             modelBuilder.Entity("WebBooks.Models.Book", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<string>("BookCategoryId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Author")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BookDescription")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BookImage")
@@ -250,6 +252,7 @@ namespace Library.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BookTitle")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CategoryId")
@@ -257,15 +260,18 @@ namespace Library.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookCategoryId");
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("books");
                 });
 
-            modelBuilder.Entity("WebBooks.Models.BookCategory", b =>
+            modelBuilder.Entity("WebBooks.Models.Category", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
@@ -277,7 +283,7 @@ namespace Library.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BookCategories");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Library.Data.ApplicationUser", b =>
@@ -350,18 +356,13 @@ namespace Library.Migrations
 
             modelBuilder.Entity("WebBooks.Models.Book", b =>
                 {
-                    b.HasOne("WebBooks.Models.BookCategory", "BookCategory")
-                        .WithMany("book")
-                        .HasForeignKey("BookCategoryId")
+                    b.HasOne("WebBooks.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("BookCategory");
-                });
-
-            modelBuilder.Entity("WebBooks.Models.BookCategory", b =>
-                {
-                    b.Navigation("book");
+                    b.Navigation("Category");
                 });
 #pragma warning restore 612, 618
         }

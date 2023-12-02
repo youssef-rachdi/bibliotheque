@@ -1,20 +1,25 @@
-﻿using Library.Models;
+﻿using Library.Data;
+using Library.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics;
 
 namespace Library.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        //private readonly ILogger<HomeController> _logger;
+        //private readonly ApplicationDbContext _db;
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+        //public HomeController(ILogger<HomeController> logger,ApplicationDbContext db)
+        //{
+        //    _logger = logger;
+        //    _db = db;
+        //}
 
         public IActionResult Index()
         {
+            //var list = _db.books.ToList();
             return View();
         }
 

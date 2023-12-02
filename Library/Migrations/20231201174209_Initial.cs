@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Library.Migrations
 {
     /// <inheritdoc />
-    public partial class InistailMigration : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,6 +30,9 @@ namespace Library.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -51,16 +54,17 @@ namespace Library.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BookCategories",
+                name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CatregoryDescription = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookCategories", x => x.Id);
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -173,20 +177,21 @@ namespace Library.Migrations
                 name: "books",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    BookTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BookDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BookTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BookDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BookImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    BookCategoryId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_books", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_books_BookCategories_BookCategoryId",
-                        column: x => x.BookCategoryId,
-                        principalTable: "BookCategories",
+                        name: "FK_books_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -231,9 +236,9 @@ namespace Library.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_books_BookCategoryId",
+                name: "IX_books_CategoryId",
                 table: "books",
-                column: "BookCategoryId");
+                column: "CategoryId");
         }
 
         /// <inheritdoc />
@@ -264,7 +269,7 @@ namespace Library.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "BookCategories");
+                name: "Categories");
         }
     }
 }
