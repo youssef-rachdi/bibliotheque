@@ -1,19 +1,11 @@
-﻿
-using FluentAssertions.Common;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.Extensions.Configuration;
-using System.Reflection.Emit;
-using System.Security.Claims;
 using WebBooks.Models;
 
 namespace Library.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole, string>
-
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -37,9 +29,15 @@ namespace Library.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.ApplyConfiguration(new ApplicationUserEntityConfiguration());
 
-           
+            builder.Entity<ApplicationUser>().ToTable("User");
+            builder.Entity<IdentityRole>().ToTable("Roles");
+            builder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");
+            builder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims");
+            builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
+            builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
+            builder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
+
         }
 
 
@@ -47,12 +45,12 @@ namespace Library.Data
         public DbSet<Category> Categories { get; set; }
     }
 
-    public class ApplicationUserEntityConfiguration : IEntityTypeConfiguration<ApplicationUser>
-    {
-        public void Configure(EntityTypeBuilder<ApplicationUser> builder)
-        {
-            builder.Property(u => u.FirstName).HasMaxLength(255);
-            builder.Property(u => u.LastName).HasMaxLength(255);
-        }
-    }
+    //public class ApplicationUserEntityConfiguration : IEntityTypeConfiguration<ApplicationUser>
+    //{
+    //    public void Configure(EntityTypeBuilder<ApplicationUser> builder)
+    //    {
+    //        builder.Property(u => u.FirstName).HasMaxLength(255);
+    //        builder.Property(u => u.LastName).HasMaxLength(255);
+    //    }
+    //}
 }
